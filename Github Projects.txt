@@ -3,4 +3,4 @@ https://github.com/eleow/shopBot  购物机器人 ISS往届项目
 https://github.com/abhishekpant93/news-article-summarizer 新闻概括
 https://github.com/qinenergy/NewsSum 网页形式 实时抓取 但没跑出来会报错 留着参考一下
 https://github.com/anyric/News-Summarizer 界面ok算法不太好
-https://github.com/shreybatra/Twitter-Stream-API-Dataset 推特api
+https://developer.twitter.com/en/docs/twitter-api/getting-started/guide
