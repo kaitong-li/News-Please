@@ -6,3 +6,4 @@ https://github.com/anyric/News-Summarizer 界面ok算法不太好
 https://developer.twitter.com/en/docs/twitter-api/getting-started/guide 
 https://github.com/wataruhashimoto52/Seq2Seq-chatbot  推特机器人
 https://www.analyticsvidhya.com/blog/2020/11/summarize-twitter-live-data-using-pretrained-nlp-models/ 总结twitter live信息（有很多不同的模型
+https://github.com/goodday451999/Tweet-Summarization-of-a-Topic-based-on-Sentiment-Analysis 通过api爬取 并作summarization和sentiment analysis
