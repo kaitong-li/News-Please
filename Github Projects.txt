@@ -8,3 +8,4 @@ https://github.com/wataruhashimoto52/Seq2Seq-chatbot  推特机器人
 https://www.analyticsvidhya.com/blog/2020/11/summarize-twitter-live-data-using-pretrained-nlp-models/ 总结twitter live信息（有很多不同的模型
 https://github.com/goodday451999/Tweet-Summarization-of-a-Topic-based-on-Sentiment-Analysis 通过api爬取 并作summarization和sentiment analysis
 https://github.com/shreyaswankhede/Twitter-Sentiment-Analysis-in-Python 情感分析notebook格式
+https://github.com/abdulfatir/twitter-sentiment-analysis  有report的twitter情感分析
