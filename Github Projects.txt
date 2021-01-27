@@ -9,3 +9,4 @@ https://www.analyticsvidhya.com/blog/2020/11/summarize-twitter-live-data-using-p
 https://github.com/goodday451999/Tweet-Summarization-of-a-Topic-based-on-Sentiment-Analysis 通过api爬取 并作summarization和sentiment analysis
 https://github.com/shreyaswankhede/Twitter-Sentiment-Analysis-in-Python 情感分析notebook格式
 https://github.com/abdulfatir/twitter-sentiment-analysis  有report的twitter情感分析
+https://github.com/shubham99999/Twitter-Sentiment-Analysis 同上
