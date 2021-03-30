@@ -11,3 +11,4 @@ https://github.com/shreyaswankhede/Twitter-Sentiment-Analysis-in-Python 情感�
 https://github.com/abdulfatir/twitter-sentiment-analysis  有report的twitter情感分析
 https://github.com/shubham99999/Twitter-Sentiment-Analysis 同上
 https://github.com/karma9874/Seq2Seq-Chatbot 那个很好看的界面
+https://github.com/Gunjan933/twitter-sentiment-analysis  可以运行的情感分析代码，有饼状图和report
