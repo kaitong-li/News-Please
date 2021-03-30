@@ -13,4 +13,5 @@ https://github.com/shubham99999/Twitter-Sentiment-Analysis 同上
 https://github.com/karma9874/Seq2Seq-Chatbot 那个很好看的界面
 https://github.com/Gunjan933/twitter-sentiment-analysis  可以运行的情感分析代码，有饼状图和report
 https://github.com/sharmaroshan/Twitter-Sentiment-Analysis 同上
-https://github.com/dD2405/Twitter_Sentiment_Analysis有test集
+https://github.com/dD2405/Twitter_Sentiment_Analysis 有test集
+https://github.com/yashkim77/AV_Twitter_Sentiment_Analysis 将test集结果存到文件中
