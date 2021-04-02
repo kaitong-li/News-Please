@@ -5,7 +5,6 @@ var you = {};
 you.avatar = "../static/Bot.png";
 
 var flag = 0;
-
 var ctr = '';
 
 ctr = '<li class="message left appeared">'+
@@ -91,7 +90,7 @@ function interact(message){
 	  });
 }
 
-var tweet_text = "";
+var tweet_text = ""; //store tweets captured from backend programme
 
 function get_message(){
 	var message = document.getElementById("text_message").value;
@@ -119,6 +118,7 @@ function get_message(){
 				dataType: 'json',
 				data: sender,
 				success: function(data){
+					tweet_text = "";
 					times = data['time'];
 					tweets = data['text'];
 					for(var i = 0; i < tweets.length; i++) {
