@@ -17,7 +17,30 @@ ctr = '<li class="message left appeared">'+
        '</li>';
 $("#ul_input").append(ctr).scrollTop($("#ul_input").prop('scrollHeight'));
 
-function insert_chat(who,text){
+function insert_figure() {
+	control_pie = '<li class="message left appeared">'+
+	                '<div class="avatar"><img class="img-circle" style="width:100%;" src="'+ you.avatar +'" /> </div>'+
+	                '<div class="text_wrapper">'+
+	                '<img id="pie" src="./static/figures/pie.jpg" max-width:40% max-height:40%>'+
+	                '</div>'+
+	                '</li>';
+	control_wc = '<li class="message left appeared">'+
+	                '<div class="avatar"><img class="img-circle" style="width:100%;" src="'+ you.avatar +'" /> </div>'+
+	                '<div class="text_wrapper">'+
+	                '<img id="wordCloud" src="./static/figures/wordCloud.jpg" max-width:35% max-height:35%>'+
+	                '</div>'+
+	                '</li>';
+	setTimeout(
+	      function(){                        
+	          $("#ul_input").append(control_pie).scrollTop($("#ul_input").prop('scrollHeight'));
+	      });
+	setTimeout(
+	      function(){                        
+	          $("#ul_input").append(control_wc).scrollTop($("#ul_input").prop('scrollHeight'));
+	      });
+}
+
+function insert_chat(who,text) {
 	var control = '';
 	if (who == 'me') {
 		control = '<li class="message right appeared">'+
@@ -92,6 +115,7 @@ function interact(message){
 
 var tweet_text = ""; //store tweets captured from backend programme
 
+
 function get_message(){
 	var message = document.getElementById("text_message").value;
 	var json_data = {"msg":message};
@@ -118,16 +142,24 @@ function get_message(){
 				dataType: 'json',
 				data: sender,
 				success: function(data){
-					tweet_text = "";
+					tweet_text = "Selected Tweets:" + '\r\n';
 					times = data['time'];
 					tweets = data['text'];
 					for(var i = 0; i < tweets.length; i++) {
-						tweet_text = tweet_text + times[i];
-						tweet_text = tweet_text + "   ";
+						tweet_text = tweet_text + (i + 1).toString() + ". (" + times[i] + ")";
+						tweet_text = tweet_text + "&nbsp;&nbsp;&nbsp;";
 						tweet_text = tweet_text + tweets[i];
 						tweet_text = tweet_text + '\r\n';
 					}
 					insert_chat("you", tweet_text);
+					sa_text = "Sentiment Analysis Result: " + '\r\n';
+					sa = data['sa'];
+					for(var j = 0; j < sa.length; j++) {
+						sa_text = sa_text + (j + 1).toString() + ". " + sa[j];
+						sa_text = sa_text + '\r\n';
+					}
+					insert_chat("you", sa_text);
+					insert_figure();
 			 	}
 			});
 		}
@@ -142,15 +174,24 @@ function get_message(){
 				dataType: 'json',
 				data: sender,
 				success: function(data){
+					tweet_text = "Selected Tweets:" + '\r\n';
 					times = data['time'];
 					tweets = data['text'];
 					for(var i = 0; i < tweets.length; i++) {
-						tweet_text = tweet_text + times[i];
-						tweet_text = tweet_text + "   ";
+						tweet_text = tweet_text + (i + 1).toString() + ". (" + times[i] + ")";
+						tweet_text = tweet_text + "&nbsp;&nbsp;&nbsp;";
 						tweet_text = tweet_text + tweets[i];
 						tweet_text = tweet_text + '\r\n';
 					}
 					insert_chat("you", tweet_text);
+					sa_text = "Sentiment Analysis Result: " + '\r\n';
+					sa = data['sa'];
+					for(var j = 0; j < sa.length; j++) {
+						sa_text = sa_text + (j + 1).toString() + ". " + sa[j];
+						sa_text = sa_text + '\r\n';
+					}
+					insert_chat("you", sa_text);
+					insert_figure();
 			 	}
 			});
 		}
