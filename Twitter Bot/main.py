@@ -15,10 +15,10 @@ import random
 import string, re
 from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
-model = load_model('chatbot_model.h5')
+model = load_model('TwitterBotModel.h5')
 intents = json.loads(open('intents.json').read())
-words = pickle.load(open('words.pkl','rb'))
-classes = pickle.load(open('classes.pkl','rb'))
+words = pickle.load(open('wordsTB.pkl','rb'))
+classes = pickle.load(open('classesTB.pkl','rb'))
 
 from flask import jsonify
 from flask_wtf.csrf import CSRFProtect
@@ -41,35 +41,30 @@ current_date = time.strftime("%Y-%m-%d")
 
 
 def clean_up_sentence(sentence):
-    # tokenize the pattern - split words into array
     sentence_words = nltk.word_tokenize(sentence)
-    # stem each word - create short form for word
     sentence_words = [lemmatizer.lemmatize(word.lower()) for word in sentence_words]
     return sentence_words
 
-def bow(sentence, words, show_details=True):
-    # tokenize the pattern
+def bag_of_words(sentence, words, show_details=True):
     sentence_words = clean_up_sentence(sentence)
-    # bag of words - matrix of N words, vocabulary matrix
-    bag = [0]*len(words)  
+    bow = [0]*len(words)  
+    print(words)
     for s in sentence_words:
         for i,w in enumerate(words):
             if w == s: 
-                # assign 1 if current word is in the vocabulary position
-                bag[i] = 1
+                bow[i] = 1
                 if show_details:
                     print ("found in bag: %s" % w)
-    return(np.array(bag))
+    return(np.array(bow))
 
 def predict_class(sentence, model):
-    # filter out predictions below a threshold
-    p = bow(sentence, words,show_details=False)
+    p = bag_of_words(sentence, words,show_details=False)
     res = model.predict(np.array([p]))[0]
     ERROR_THRESHOLD = 0.25
     results = [[i,r] for i,r in enumerate(res) if r>ERROR_THRESHOLD]
-    # sort by strength of probability
     results.sort(key=lambda x: x[1], reverse=True)
     return_list = []
+    print(classes)
     for r in results:
         return_list.append({"intent": classes[r[0]], "probability": str(r[1])})
     return return_list
@@ -103,7 +98,6 @@ def tweetDisplayByKeyword():
     tweets = []
     times = []
     for tweet in tweepy.Cursor(api.search, q=text+" -filter:retweets", count=2, lang="en", since=current_date, tweet_mode="extended").items(10):
-        print (tweet.created_at, tweet.full_text)
         cleaned_tweet_text = re.sub(r"(?:\@|https?\://)\S+", "", tweet.full_text) #remove web links
         cleaned_tweet_text = re.sub('&amp;', '&', cleaned_tweet_text) #remove web links
         tweets.append(cleaned_tweet_text)
@@ -117,7 +111,6 @@ def tweetDisplayByAccount():
     tweets = []
     times = []
     for tweet in tweepy.Cursor(api.user_timeline, q="-filter:retweets", id=text, count=2, lang="en", since=current_date, include_rts=False, tweet_mode="extended").items(10):
-        print (tweet.created_at, tweet.full_text)
         cleaned_tweet_text = re.sub(r"(?:\@|https?\://)\S+", "", tweet.full_text) #remove web links
         cleaned_tweet_text = re.sub('&amp;', '&', cleaned_tweet_text) #remove web links
         tweets.append(cleaned_tweet_text)
