@@ -12,6 +12,7 @@ from keras.models import load_model
 import json
 import nltk
 import random
+import string, re
 from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
 model = load_model('chatbot_model.h5')
@@ -101,9 +102,11 @@ def tweetDisplayByKeyword():
     text = json_request['msg']
     tweets = []
     times = []
-    for tweet in tweepy.Cursor(api.search,q=text+" -filter:retweets",count=2,lang="en",since=current_date).items(10):
-        print (tweet.created_at, tweet.text)
-        tweets.append(tweet.text)
+    for tweet in tweepy.Cursor(api.search, q=text+" -filter:retweets", count=2, lang="en", since=current_date, tweet_mode="extended").items(10):
+        print (tweet.created_at, tweet.full_text)
+        cleaned_tweet_text = re.sub(r"(?:\@|https?\://)\S+", "", tweet.full_text) #remove web links
+        cleaned_tweet_text = re.sub('&amp;', '&', cleaned_tweet_text) #remove web links
+        tweets.append(cleaned_tweet_text)
         times.append(tweet.created_at)
     return jsonify(time=times, text=tweets)
 
@@ -113,9 +116,11 @@ def tweetDisplayByAccount():
     text = json_request['msg']
     tweets = []
     times = []
-    for tweet in tweepy.Cursor(api.user_timeline,q="-filter:retweets",id=text,count=2,lang="en",since=current_date,include_rts=False).items(10):
-        print (tweet.created_at, tweet.text)
-        tweets.append(tweet.text)
+    for tweet in tweepy.Cursor(api.user_timeline, q="-filter:retweets", id=text, count=2, lang="en", since=current_date, include_rts=False, tweet_mode="extended").items(10):
+        print (tweet.created_at, tweet.full_text)
+        cleaned_tweet_text = re.sub(r"(?:\@|https?\://)\S+", "", tweet.full_text) #remove web links
+        cleaned_tweet_text = re.sub('&amp;', '&', cleaned_tweet_text) #remove web links
+        tweets.append(cleaned_tweet_text)
         times.append(tweet.created_at)
     return jsonify(time=times, text=tweets)
 
