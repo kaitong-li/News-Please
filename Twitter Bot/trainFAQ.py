@@ -17,7 +17,6 @@ ignore_words = ['?', '!']
 data_file = open('intents.json').read()
 intents = json.loads(data_file)
 
-
 for intent in intents['intents']:
     for pattern in intent['patterns']:
         w = nltk.word_tokenize(pattern)
@@ -30,11 +29,6 @@ for intent in intents['intents']:
 words = [lemmatizer.lemmatize(w.lower()) for w in words if w not in ignore_words]
 words = sorted(list(set(words)))
 classes = sorted(list(set(classes)))
-print (len(documents), "documents")
-print (len(classes), "classes", classes)
-print (len(words), "unique lemmatized words", words)
-
-
 pickle.dump(words,open('wordsTB.pkl','wb'))
 pickle.dump(classes,open('classesTB.pkl','wb'))
 
@@ -55,8 +49,6 @@ random.shuffle(training)
 training = np.array(training)
 train_x = list(training[:,0])
 train_y = list(training[:,1])
-print("Training data created")
-
 
 model = Sequential()
 model.add(Dense(128, input_shape=(len(train_x[0]),), activation='relu'))

@@ -14,6 +14,7 @@ import nltk
 import random
 import string, re
 import joblib
+import geocoder
 from wordcloud import WordCloud
 from nltk.stem import WordNetLemmatizer
 from flask import jsonify
@@ -60,12 +61,15 @@ def bag_of_words(sentence, words, show_details=True):
 def predict_class(sentence, model):
     p = bag_of_words(sentence, words,show_details=False)
     res = model.predict(np.array([p]))[0]
-    ERROR_THRESHOLD = 0.25
-    results = [[i,r] for i,r in enumerate(res) if r>ERROR_THRESHOLD]
+    ERROR_THRESHOLD = 0.25 #filter out prediction with low score
+    results = [[i, r] for i, r in enumerate(res) if r > ERROR_THRESHOLD]
     results.sort(key=lambda x: x[1], reverse=True)
     return_list = []
     for r in results:
-        return_list.append({"intent": classes[r[0]], "probability": str(r[1])})
+        if r[1] > ERROR_THRESHOLD and r[1] < 0.4:
+            return_list.append({"intent": classes[4], "probability": str(r[1])})
+        else:
+            return_list.append({"intent": classes[r[0]], "probability": str(r[1])})
     return return_list
 
 def getResponse(ints, intents_json):
@@ -89,6 +93,15 @@ def reply():
     ints = predict_class(text, model)
     res = getResponse(ints, intents)
     return jsonify(text=res)
+
+def trend():
+    #trends in Singapore
+    loc = "Singapore" 
+    g = geocoder.osm(loc) 
+    closest_loc = api.trends_closest(g.lat, g.lng)
+    trending = api.trends_place(closest_loc[0]['woeid'])
+    topics = [x['name'] for x in trending[0]['trends']]
+    return topics
 
 def sentimentAnalysis(tweets):
     predicted = sentiment_analysis_model.predict(tweets)
@@ -161,6 +174,11 @@ def tweetDisplayByAccount():
     plotSentimentPieChart(sentiment_analysis_result)
     plotWordCloud(tweets)
     return jsonify(time=times, text=tweets, sa=sentiment_analysis_result_string)
+
+@app.route('/tweetTrends', methods=['POST'])
+def tweetTrends():
+    trends = trend()
+    return jsonify(trends=trends)
 
 if __name__=="__main__":
     app.run(port=2020,host="127.0.0.1",debug=True)
