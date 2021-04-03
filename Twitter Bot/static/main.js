@@ -10,9 +10,10 @@ var ctr = '';
 ctr = '<li class="message left appeared">'+
        '<div class="avatar"><img class="img-circle" style="width:100%;" src="'+ you.avatar +'" /> </div>'+
        '<div class="text_wrapper">'+
-       '<div class="text">Welcome to Twitter Bot. Please choose one option.'+'<br><br>'+
-       '<button type="submit" id="select_by_keyword"> Search by keyword </button>'+'<br><br>'+
-       '<button type="submit" id="select_by_account"> Search by username </button>'+
+       '<div class="text">Welcome to Twitter Bot. Please select one option.'+'<br><br>'+
+       '<button type="submit" id="select_by_keyword"> Search by Keyword </button>'+'<br><br>'+
+       '<button type="submit" id="select_by_account"> Search by Username </button>'+'<br><br>'+
+       '<button type="submit" id="trends"> Trends in Singapore </button>'+
 	   '</div>'+
        '</li>';
 $("#ul_input").append(ctr).scrollTop($("#ul_input").prop('scrollHeight'));
@@ -66,22 +67,22 @@ function insert_chat(who,text) {
 
 function insert_menu(command) {
 	var control = '';
-	if(command == 'return') {
-		control = '<li class="message left appeared">'+
-                    '<div class="avatar"><img class="img-circle" style="width:100%;" src="'+ you.avatar +'" /> </div>'+
-                    '<div class="text_wrapper">'+
-                    '<button type="submit" id="select_by_keyword"> Search by keyword </button>'+'<br><br>'+
-                    '<button type="submit" id="select_by_account"> Search by username </button>'+
-	                '</div>'+
-                    '</li>';
-	}
+	control = '<li class="message left appeared">'+
+	       '<div class="avatar"><img class="img-circle" style="width:100%;" src="'+ you.avatar +'" /> </div>'+
+	       '<div class="text_wrapper">'+
+	       '<div class="text">Please select one option.'+'<br><br>'+
+	       '<button type="submit" id="select_by_keyword"> Search by Keyword </button>'+'<br><br>'+
+	       '<button type="submit" id="select_by_account"> Search by Username </button>'+'<br><br>'+
+       		'<button type="submit" id="trends"> Trends in Singapore </button>'+
+		   '</div>'+
+	       '</li>';
 	setTimeout(
 	      function(){                        
 	          $("#ul_input").append(control).scrollTop($("#ul_input").prop('scrollHeight'));
 	      });
 }
 
- $(document).on('click', '#select_by_keyword',function(){
+$(document).on('click', '#select_by_keyword',function(){
 	var element = document.getElementById("select_by_keyword");
 	var text = element.innerText;
 	insert_chat("me", text);
@@ -90,12 +91,20 @@ function insert_menu(command) {
 });
 
 
- $(document).on('click', '#select_by_account',function(){
+$(document).on('click', '#select_by_account',function(){
 	var element = document.getElementById("select_by_account");
 	var text = element.innerText;
 	insert_chat("me", text);
 	insert_chat("you", "Please input the username.");
 	flag = 2;
+});
+
+$(document).on('click', '#trends',function(){
+	var element = document.getElementById("trends");
+	var text = element.innerText;
+	insert_chat("me", text);
+	flag = 3;
+	get_message();
 });
 
 
@@ -118,21 +127,28 @@ var tweet_text = ""; //store tweets captured from backend programme
 
 function get_message(){
 	var message = document.getElementById("text_message").value;
+	if(flag == 3) {
+		message = "trends";
+	}
 	var json_data = {"msg":message};
 	var sender = JSON.stringify(json_data);
 	var getElement = document.getElementById("text_message");
 	getElement.innerText = "";
 	getElement.value = "";
 	getElement.text = "";
-	console.log(sender);
-	console.log(message);
-	insert_chat('me',message);
-	if(message=='return'){
+	if(flag != 3) {
+		insert_chat('me',message);
+	}
+	if(message.toLowerCase() == "trends in singapore" || message.toLowerCase() == "trend in singapore" 
+		|| message.toLowerCase() == "what's the trend in singapore" || message.toLowerCase() == "trends"
+		|| message.toLowerCase() == "what's the trend") {
+		flag = 3;
+	}
+	if(message == 'return') {
 		insert_menu('return');
 	}
-	else{
+	else {
 		if(flag == 1) {
-			console.log("STARTING");
 			times = []
 			tweets = []
 			$.ajax({
@@ -160,11 +176,11 @@ function get_message(){
 					}
 					insert_chat("you", sa_text);
 					insert_figure();
+					insert_menu("return");
 			 	}
 			});
 		}
 		else if(flag == 2) {
-			console.log("STARTING");
 			times = []
 			tweets = []
 			$.ajax({
@@ -192,6 +208,26 @@ function get_message(){
 					}
 					insert_chat("you", sa_text);
 					insert_figure();
+					insert_menu("return");
+			 	}
+			});
+		}
+		else if(flag == 3) {
+			$.ajax({
+				type: 'POST',
+				url: '/tweetTrends',
+				contentType: 'application/json',
+				dataType: 'json',
+				data: sender,
+				success: function(data){
+					trend_text = "Trends in Singapore:" + '\r\n';
+					trends = data['trends'];
+					for(var i = 0; i < trends.length; i++) {
+						trend_text = trend_text + (i + 1).toString() + ". " + trends[i];
+						trend_text = trend_text + '\r\n';
+					}
+					insert_chat("you", trend_text);
+					insert_menu("return");
 			 	}
 			});
 		}
