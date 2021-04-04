@@ -29,3 +29,8 @@ Wait until you see
 * Debugger PIN: 139-105-285
 * Running on http://127.0.0.1:2020/ (Press CTRL+C to quit)
 
+
+**********************************
+
+
+Run http://127.0.0.1:2020/ on web browser. Then you can use the chatbot.
