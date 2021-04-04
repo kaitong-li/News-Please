@@ -10,8 +10,8 @@ Open Anaconda prompt.
 Go to the directory where main.py is. 
 Run python.py.
 Wait until you see
--------------------
+####################
 * Debugger is active!
 * Debugger PIN: 139-105-285
 * Running on http://127.0.0.1:2020/ (Press CTRL+C to quit)
--------------------
+####################
