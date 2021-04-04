@@ -3,11 +3,13 @@ Run the following command to install required library.
 
 pip install -r requirements.txt 
 
+
 If using python 3.7, the following step should be done before running the program.
 
 Go to "D:\anaconda3\lib\site-packages\tweepy\streaming.py"
 
 Then update all the "async" to "async_"
+
 
 Open Anaconda prompt. 
 
